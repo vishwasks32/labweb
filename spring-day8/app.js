@@ -3,7 +3,7 @@ const app = express();
 
 const appName = "CloudThat Labs"
 const programName = "Deloitte Platform Integration"
-const technologyName = "NodeJS"
+const technologyName = "Full Stack Labs"
 
 // app.set('views', './views'); // Assuming views directory is in the same directory as your app
 app.set('view engine', 'ejs');
