@@ -1,0 +1,40 @@
+<h1 id="lab-creating-product-service-for-ecommerce-app">Lab: Creating Product Service for Ecommerce App</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-generating-template-from-spring-initializer">Task 1: Generating Template from spring initializer</h3>
+<ul>
+<li><p>visit the <a href="https://start.spring.io">spring initializer</a></p></li>
+<li><p>Add the dependencies</p>
+<ul>
+<li>Spring Web</li>
+<li>Eureka Client</li>
+<li>Lombok</li>
+<li>Data JPA</li>
+<li>Mysql</li>
+<li>Cloud Bootstrap</li>
+</ul>
+<p><img src="./images/image2-1.png" /></p></li>
+</ul>
+<h3 id="task-2-open-the-project-in-intellij">Task 2: Open the project in intelliJ</h3>
+<ul>
+<li>Convert <code>application.properties</code> to <code>application.yaml</code></li>
+<li>Set <code>server.port</code> to <code>8080</code></li>
+</ul>
+<h3 id="task-3-creating-product-service">Task 3: Creating Product Service</h3>
+<ul>
+<li>Create – endpoints as in spring boot app as you created earlier</li>
+<li>Product Resource has the fields as below
+<ul>
+<li>productId</li>
+<li>productName</li>
+<li>price</li>
+<li>quantity</li>
+<li>category</li>
+</ul></li>
+<li>Also add an endpoint</li>
+</ul>
+<p><img src="./images/image2-2.png" /></p>
+<h3 id="task-4-add-product-service-as-eureka-client">Task 4: Add product Service as Eureka Client</h3>
+<p><img src="./images/image2-3.png" /></p>
+<p>test the product service and service registry</p>
+<h2 id="output">Output</h2>
+<p><img src="./images/image2-4.png" /></p>

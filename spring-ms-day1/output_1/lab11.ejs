@@ -1,0 +1,57 @@
+<h1 id="lab-adding-api-gateway-t-ecommerce-application">Lab: Adding API Gateway t Ecommerce Application</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-generate-template">Task 1: Generate template</h3>
+<p>visit <a href="https://start.spring.io">spring starter</a></p>
+<h3 id="task-2-add-the-dependencies">Task 2: Add the dependencies</h3>
+<ul>
+<li>cloud bootstrap,</li>
+<li>gateway,</li>
+<li>spring reactive web,</li>
+<li>zipkin,</li>
+<li>Lombok,</li>
+<li>config client,</li>
+<li>eureka client,</li>
+<li>spring boot actuator</li>
+</ul>
+<p><img src="./images/image11-1.png" /> The above is a reactive gateway</p>
+<h3 id="task-3-open-in-intellij">Task 3: Open in IntelliJ</h3>
+<ul>
+<li>Convert from <code>application.properties</code> to <code>application.yml</code></li>
+<li>Add the below configuration to <code>application.yml</code></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">server</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">9090</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">spring</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">application</span><span class="kw">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">        </span><span class="fu">name</span><span class="kw">:</span><span class="at"> API-GATEWAY</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">    </span><span class="fu">config</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="at">        </span><span class="fu">import</span><span class="kw">:</span><span class="at"> configserver:http://localhost:9296</span></span></code></pre></div>
+<h3 id="task-4-add-the-routes">Task 4: Add the routes</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="fu">spring</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">  </span><span class="fu">application</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> API-GATEWAY</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="at">  </span><span class="fu">config</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="at">    </span><span class="fu">import</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="at">    </span><span class="kw">-</span><span class="at"> configserver:http://localhost:9296</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="at">  </span><span class="fu">cloud</span><span class="kw">:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="at">    </span><span class="fu">gateway</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="at">      </span><span class="fu">mvc</span><span class="kw">:</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="at">        </span><span class="fu">routes</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">id </span><span class="kw">:</span><span class="at"> ORDER-SERVICE</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="at">          </span><span class="fu">uri</span><span class="kw">:</span><span class="at"> lb://ORDER-SERVICE</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="at">          </span><span class="fu">predicates</span><span class="kw">:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> Path=/order/**</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="at">          </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> PAYMENT-SERVICE</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="at">          </span><span class="fu">uri</span><span class="kw">:</span><span class="at"> lb://PAYMENT-SERVICE</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="at">          </span><span class="fu">predicates</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> Path=/payment/**</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="at">          </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> PRODUCT-SERVICE</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a><span class="at">          </span><span class="fu">uri</span><span class="kw">:</span><span class="at"> lb://PRODUCT-SERVICE</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="at">          </span><span class="fu">predicates</span><span class="kw">:</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> Path=/product/** </span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a><span class="at">    </span><span class="fu">discovery</span><span class="kw">:</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="at">        </span><span class="fu">enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+<p>From now on change all routes to route from <code>localhost:9090</code></p>

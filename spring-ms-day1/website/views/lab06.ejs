@@ -1,0 +1,90 @@
+<h1 id="lab-handling-errors-from-one-service-to-another-in-eommerce-app">Lab: Handling errors from one service to another in Eommerce App</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-in-the-external-package--create-a-package-decoder">Task 1: In the external package – create a package decoder</h3>
+<p><img src="./images/image5-2.png" /></p>
+<h3 id="task-2-create-a-class-custom-error-decoder-which-implements-errordecoder-from-feign-client">Task 2: Create a class custom error decoder which implements ErrorDecoder from feign client</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="at">@Log4j2</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> CustomErrorDecoder <span class="kw">implements</span> ErrorDecoder {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="at">@Override</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Exception</span> <span class="fu">decode</span>(<span class="bu">String</span> s, <span class="bu">Response</span> response) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        ObjectMapper objectMapper</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>                = <span class="kw">new</span> <span class="fu">ObjectMapper</span>();</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        log.<span class="fu">info</span>(<span class="st">&quot;::{}&quot;</span>,response.<span class="fu">request</span>().<span class="fu">url</span>());</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>        log.<span class="fu">info</span>(<span class="st">&quot;::{}&quot;</span>,response.<span class="fu">request</span>().<span class="fu">headers</span>());</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="kw">try</span> {</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>            ErrorResponse errorResponse</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>                    = objectMapper.<span class="fu">readValue</span>(response.<span class="fu">body</span>().<span class="fu">asInputStream</span>(),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>                    ErrorResponse.<span class="fu">class</span>);</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">new</span> <span class="fu">CustomException</span>(errorResponse.<span class="fu">getErrorMessage</span>() ,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>                    errorResponse.<span class="fu">getErrorCode</span>(),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>                    response.<span class="fu">status</span>());</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>        } <span class="kw">catch</span> (<span class="bu">IOException</span> e) {</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>            <span class="kw">throw</span>  <span class="kw">new</span> <span class="fu">CustomException</span>(<span class="st">&quot;Internal Server Error&quot;</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>                    <span class="st">&quot;INTERNAL_SERVER_ERROR&quot;</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>                    <span class="dv">500</span>);</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>        }</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>    }</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="task-3-add-config-to-use-custom-error-decoder-instead-of-error-decoder">Task 3: Add config to use custom error decoder instead of error decoder</h3>
+<p><img src="./images/image5-4.png" /></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">@Configuration</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> FeignConfig {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="at">@Bean</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    ErrorDecoder <span class="fu">errorDecoder</span>() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">new</span> <span class="fu">CustomErrorDecoder</span>();</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="task-4-adding-exception-handling-in-order-service">Task 4: Adding Exception Handling in order service</h3>
+<p><img src="./images/image5-5.png" /></p>
+<ul>
+<li>In <code>CustomException.java</code></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">@Data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> CustomException <span class="kw">extends</span> <span class="bu">RuntimeException</span>{</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="co">/**</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>     <span class="co">*</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>     <span class="co">*/</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">long</span> serialVersionUID = <span class="dv">1L</span>;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">String</span> errorCode;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> status;</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">CustomException</span>(<span class="bu">String</span> message, <span class="bu">String</span> errorCode, <span class="dt">int</span> status) {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>        <span class="kw">super</span>(message);</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">errorCode</span> = errorCode;</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">status</span> = status;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>    }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>}</span></code></pre></div>
+<ul>
+<li>In <code>RestResponseEntityExceptionHandler.java</code></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">@ControllerAdvice</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> RestResponseEntityExceptionHandler <span class="kw">extends</span> ResponseEntityExceptionHandler {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="at">@ExceptionHandler</span>(CustomException.<span class="fu">class</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="kw">public</span> ResponseEntity&lt;ErrorResponse&gt; <span class="fu">handleCustomException</span>(CustomException exception) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">new</span> ResponseEntity&lt;ErrorResponse&gt;(<span class="kw">new</span> <span class="fu">ErrorResponse</span>().<span class="fu">builder</span>()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>                    .<span class="fu">errorMessage</span>(exception.<span class="fu">getMessage</span>())</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>                    .<span class="fu">errorCode</span>(exception.<span class="fu">getErrorCode</span>())</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>                    .<span class="fu">build</span>(),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>                    HttpStatus.<span class="fu">valueOf</span>(exception.<span class="fu">getStatus</span>()));</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>    }</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>}</span></code></pre></div>
+<ul>
+<li>Create a error response model</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">@Data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">@AllArgsConstructor</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="at">@NoArgsConstructor</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">@Builder</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> ErrorResponse {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">String</span> errorMessage;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">String</span> errorCode;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a></span></code></pre></div>

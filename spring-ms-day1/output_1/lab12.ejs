@@ -1,0 +1,60 @@
+<h1 id="lab-implementing-circuit-breaker">Lab: Implementing Circuit Breaker</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-adding-dependency-to-cloud-gateway">Task 1: Adding dependency to cloud gateway</h3>
+<p><img src="./images/image12-1.png" /></p>
+<h3 id="task-2-add-fallback-uri">Task 2: Add fallback uri</h3>
+<p><img src="./images/image12-2.png" /></p>
+<h3 id="task-3-implement-fallback-controller">Task 3: Implement Fallback controller</h3>
+<p><img src="./images/image12-3.png" /></p>
+<h3 id="task-4-in-cloudgateway--create-bean-for-circuit-breaker">Task 4: In cloudgateway – create bean for circuit breaker</h3>
+<p><img src="./images/image12-4.png" /></p>
+<p><img src="./images/image12-5.png" /></p>
+<h3 id="task-5-adding-circuitbreaker">Task 5: Adding Circuitbreaker</h3>
+<p>In Order service pom.xml add circuitbreaker dependency In feign clients insert circuit breaker</p>
+<p><img src="./images/image12-6.png" /></p>
+<h3 id="task-6-add-configuration-in-order-service">Task 6: Add configuration in order service</h3>
+<p><img src="./images/image12-7.png" /></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">resilience4j</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">circuitbreaker</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">instances</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">      </span><span class="fu">external</span><span class="kw">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">        </span><span class="fu">event-consumer-buffer-size</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">        </span><span class="fu">failure-rate-threshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="at">        </span><span class="fu">minimum-number-of-calls</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="at">        </span><span class="fu">automatic-transition-from-open-to-half-open-enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="at">        </span><span class="fu">wait-duration-in-open-state</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="at">        </span><span class="fu">permitted-number-of-calls-in-half-open-state</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="at">        </span><span class="fu">sliding-window-size</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="at">        </span><span class="fu">sliding-window-type</span><span class="kw">:</span><span class="at"> COUNT_BASED</span></span></code></pre></div>
+<h3 id="task-7-implementing-rate-limiter">Task 7: Implementing Rate Limiter</h3>
+<ul>
+<li>Implementing Rate Limiter using Redis and Resilience4J</li>
+<li>Download and start redis docker image</li>
+<li>Add dependency of reactive redis In cloud gateway</li>
+</ul>
+<p><img src="./images/image12-8.png" /></p>
+<p><img src="./images/image12-9.png" /></p>
+<h3 id="task-8-add-replenish-rate-and-burst-capacity">Task 8: Add replenish rate and burst capacity</h3>
+<p><img src="./images/image12-10.png" /></p>
+<p>Add this for every service in cloud gateway</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> PAYMENT-SERVICE</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">          </span><span class="fu">uri</span><span class="kw">:</span><span class="at"> lb://PAYMENT-SERVICE</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">          </span><span class="fu">predicates</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> Path=/payment/**</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="at">          </span><span class="fu">filters</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> CircuitBreaker</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="at">              </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="at">                </span><span class="fu">name</span><span class="kw">:</span><span class="at"> paymentServiceCB</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="at">                </span><span class="fu">fallbackUri</span><span class="kw">:</span><span class="at"> forward:/paymentServiceFallBack</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="at">            </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> RequestRateLimiter</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="at">              </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="at">                </span><span class="fu">redis-rate-limiter.replenishRate</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="at">                </span><span class="fu">redis-rate-limiter.burstCapacity</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="at">                </span><span class="fu">redis-rate-limiter.requestedTokens</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
+<h2 id="output">Output:</h2>
+<p><img src="./images/image12-11.png" /></p>
+<p>Refer</p>
+<ol>
+<li><a href="https://resilience4j.readme.io/docs/getting-started-3">https://resilience4j.readme.io/docs/getting-started-3</a></li>
+<li><a href="https://spring.io/guides/gs/cloud-circuit-breaker">https://spring.io/guides/gs/cloud-circuit-breaker</a></li>
+</ol>

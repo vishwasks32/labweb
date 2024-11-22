@@ -1,0 +1,55 @@
+<h1 id="lab-communication-between-order-service-and-product-service-in-ecommerce-app">Lab: Communication between order service and product service in Ecommerce App</h1>
+<p>Feign is a declarative web service client. It makes writing web service clients easier. To use Feign create an interface and annotate it. It has pluggable annotation support including Feign annotations and JAX-RS annotations. Feign also supports pluggable encoders and decoders.</p>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-in-the-order-service-add-the-dependency-open-feign-client">Task 1: In the Order Service add the dependency open feign client</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">&lt;dependency&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">&lt;groupId&gt;</span>org.springframework.cloud<span class="kw">&lt;/groupId&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">&lt;artifactId&gt;</span>spring-cloud-starter-openfeign<span class="kw">&lt;/artifactId&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">&lt;/dependency&gt;</span></span></code></pre></div>
+<h3 id="task-2-make-order-service-as-a-open-feign-client">Task 2: Make Order Service as a open feign client</h3>
+<p><img src="./images/image5-1.png" /></p>
+<h3 id="task-3-adding-product-service-as-external-dependency">Task 3: Adding Product service as external dependency</h3>
+<ul>
+<li>In the orderService create a <code>external</code> package</li>
+</ul>
+<p><img src="./images/image5-2.png" /></p>
+<h3 id="task-4-in-the-interface-product-service-add">Task 4: In the interface product service add</h3>
+<ul>
+<li>Implement Feign Client(Product Service) in Order service as an external.client package and create an interface</li>
+<li>Declare the method of product service which you are going to use</li>
+</ul>
+<p><img src="./images/image5-3.png" /></p>
+<ul>
+<li>Add the code to call reduce quantity when order is placed</li>
+<li>Add below code in orderserviceImpl</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>   <span class="at">@Override</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">long</span> <span class="fu">placeOrder</span>(OrderRequest orderRequest) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        <span class="co">//Order Entity -&gt; Save the data with Status Order Created</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>        <span class="co">//Product Service - Block Products (Reduce the Quantity)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        <span class="co">//Payment Service -&gt; Payments -&gt; Success-&gt; COMPLETE, Else</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>        <span class="co">//CANCELLED</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>        log.<span class="fu">info</span>(<span class="st">&quot;Placing Order Request: {}&quot;</span>, orderRequest);</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>        productService.<span class="fu">reduceQuantity</span>(orderRequest.<span class="fu">getProductId</span>(), orderRequest.<span class="fu">getQuantity</span>());</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>        log.<span class="fu">info</span>(<span class="st">&quot;Creating Order with Status CREATED&quot;</span>);</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>        Order order = Order.<span class="fu">builder</span>()</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>                .<span class="fu">amount</span>(orderRequest.<span class="fu">getTotalAmount</span>())</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>                .<span class="fu">orderStatus</span>(<span class="st">&quot;CREATED&quot;</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>                .<span class="fu">productId</span>(orderRequest.<span class="fu">getProductId</span>())</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>                .<span class="fu">orderDate</span>(Instant.<span class="fu">now</span>())</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>                .<span class="fu">quantity</span>(orderRequest.<span class="fu">getQuantity</span>())</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>                .<span class="fu">build</span>();</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>        order = orderRepository.<span class="fu">save</span>(order);</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>        log.<span class="fu">info</span>(<span class="st">&quot;Order Places successfully with Order Id: {}&quot;</span>, order.<span class="fu">getId</span>());</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>        <span class="kw">return</span> order.<span class="fu">getId</span>();</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    }</span></code></pre></div>
+<ul>
+<li>Restart the order service</li>
+<li>Test the api using place order</li>
+</ul>
