@@ -1,0 +1,49 @@
+<h1 id="lab-spring-boot-configuration">Lab: Spring Boot Configuration</h1>
+<h2 id="objective">Objective</h2>
+<ul>
+<li>To explore different ways to configure Spring Boot applications.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<h3 id="task-1-create-a-new-spring-boot-project">Task 1: Create a new Spring Boot project.</h3>
+<p><img src="./images/image2-1.png" /></p>
+<h3 id="task-2-configure-application-properties-using-applicationproperties">Task 2: Configure application properties using application.properties</h3>
+<p><img src="./images/image2-3.png" /></p>
+<h3 id="task-3-inject-these-properties-into-your-restcontroller-class-and-use-them-to-customize-the-response">Task 3: Inject these properties into your @RestController class and use them to customize the response.</h3>
+<p><img src="./images/image2-2.png" /></p>
+<h2 id="output">Output</h2>
+<p><img src="./images/image2-5.png" /></p>
+<p><img src="./images/image2-6.png" /></p>
+<h3 id="task-4-converting-applicationproperties-to-applicationyaml">Task 4: Converting Application.properties to application.yaml</h3>
+<p><img src="./images/image2-4.png" /></p>
+<h2 id="output-1">Output</h2>
+<p><img src="./images/image2-5.png" /></p>
+<h3 id="task-4-environment-variables">Task 4: Environment variables</h3>
+<ul>
+<li>We can pass the environent variables to the properties file or yaml file</li>
+<li>To set the environent variables for our application</li>
+<li>We can set multiple environment variables using semicolon(<code>;</code>)</li>
+<li>For our application after the below changes, we should get the same result</li>
+</ul>
+<p><img src="./images/image2-7.png" /></p>
+<p><img src="./images/image2-8.png" /></p>
+<p><img src="./images/image2-9.png" /></p>
+<p><img src="./images/image2-10.png" /></p>
+<h2 id="output-2">Output</h2>
+<p><img src="./images/image2-6.png" /></p>
+<ul>
+<li>We can also set the environmnt variable in terminal &amp; execute application</li>
+</ul>
+<h3 id="task-5-command-line-arguments">Task 5: command-line arguments</h3>
+<ul>
+<li>We can pass arguments to our application using commandline parameters when executing from command prompt</li>
+</ul>
+<pre class="cmd"><code>.\mvnw.cmd -Dspring-boot.run.arguments=--appversion=1L spring-boot:run
+</code></pre>
+<p><img src="./images/image2-11.png" /></p>
+<ul>
+<li>From linux or wsl terminal</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">./mvnw</span> -Dspring-boot.run.arguments=--appversion=1L spring-boot:run</span></code></pre></div>
+<p><img src="./images/image2-12.png" /></p>
+<h2 id="output-3">Output</h2>
+<p><img src="./images/image2-5.png" /></p>
