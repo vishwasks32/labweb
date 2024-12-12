@@ -1,0 +1,53 @@
+<h1 id="lab-example-of-external-javascript">Lab: Example of External JavaScript</h1>
+<h2 id="tasks">Tasks:</h2>
+<h3 id="task-1-create-a-html-file">Task 1: Create a HTML file</h3>
+<p>Create a file called as <code>index.html</code>. Enter the below code</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&quot;en&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">&lt;head&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="kw">&lt;meta</span><span class="ot"> charset=</span><span class="st">&quot;UTF-8&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;viewport&quot;</span><span class="ot"> content=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="kw">&lt;title&gt;</span>Java Script Basics<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="kw">&lt;style&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>        <span class="pp">#btn</span> {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>            <span class="kw">font-family</span>: <span class="st">&quot;helvetica neue&quot;</span><span class="op">,</span> helvetica<span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>            <span class="kw">letter-spacing</span>: <span class="dv">1</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>            <span class="kw">text-transform</span>: <span class="dv">uppercase</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>            <span class="kw">border</span>: <span class="dv">2</span><span class="dt">px</span> <span class="dv">solid</span> <span class="cn">blue</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>            <span class="kw">background-color</span>: <span class="cn">cyan</span><span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>            <span class="kw">color</span>: <span class="fu">rgb(</span><span class="dv">100</span> <span class="dv">0</span> <span class="dv">0</span> / <span class="dv">100</span><span class="dt">%</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>            <span class="kw">box-shadow</span>: <span class="dv">1</span><span class="dt">px</span> <span class="dv">1</span><span class="dt">px</span> <span class="dv">2</span><span class="dt">px</span> <span class="fu">rgb(</span><span class="dv">0</span> <span class="dv">0</span> <span class="dv">200</span> / <span class="dv">40</span><span class="dt">%</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>            <span class="kw">border-radius</span>: <span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>            <span class="kw">padding</span>: <span class="dv">3</span><span class="dt">px</span> <span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>            <span class="kw">cursor</span>: <span class="dv">pointer</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>        }</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>    <span class="kw">&lt;/style&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    <span class="kw">&lt;script</span><span class="ot"> type=</span><span class="st">&quot;text/javascript&quot;</span><span class="ot"> src=</span><span class="st">&quot;first.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="kw">&lt;/head&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>    <span class="kw">&lt;label</span> <span class="kw">&gt;</span>Player 1: <span class="kw">&lt;/label&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>    <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;text&quot;</span><span class="ot"> placeholder=</span><span class="st">&quot;Full Name&quot;</span><span class="ot"> id=</span><span class="st">&quot;nameVal&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>    <span class="kw">&lt;input</span><span class="ot"> id=</span><span class="st">&quot;btn&quot;</span><span class="ot"> type=</span><span class="st">&quot;button&quot;</span><span class="ot"> value=</span><span class="st">&quot;Submit&quot;</span><span class="ot"> onclick=</span><span class="st">&quot;onButtonClick(nameVal.value)&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a><span class="kw">&lt;/body&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+<h4 id="note">Note:</h4>
+<ul>
+<li><code>async</code> and <code>defer</code> both instruct the browser to download the script(s) in a separate thread, while the rest of the page (the DOM, etc.) is downloading, so the page loading is not blocked during the fetch process.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;first.js&quot;</span><span class="ot"> async</span><span class="kw">&gt;&lt;/script&gt;</span> </span></code></pre></div>
+<ul>
+<li>scripts with an <code>async</code> attribute will execute as soon as the download is complete. This blocks the page and does not guarantee any specific execution order.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;first.js&quot;</span><span class="ot"> defer</span><span class="kw">&gt;&lt;/script&gt;</span></span></code></pre></div>
+<ul>
+<li><p>scripts with a <code>defer</code> attribute will load in the order they are in and will only execute once everything has finished loading.</p></li>
+<li><p>If your scripts should be run immediately and they don't have any dependencies, then use async.</p></li>
+<li><p>If your scripts need to wait for parsing and depend on other scripts and/or the DOM being in place, load them using defer and put their corresponding <code>&lt;script&gt;</code> elements in the order you want the browser to execute them.</p></li>
+</ul>
+<h3 id="task-2-create-a-javascript-file">Task 2: Create a Javascript File</h3>
+<p>Create a javascript file with the name <code>first.js</code> &amp; enter the code below</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">function</span> <span class="fu">onButtonClick</span>(uname){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="fu">alert</span>(<span class="st">&quot;Player name is: &quot;</span><span class="op">+</span>uname)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="output">Output:</h3>
+<p><img src="./images/image3.png" /></p>

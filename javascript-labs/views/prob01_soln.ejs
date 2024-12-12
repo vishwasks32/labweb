@@ -1,0 +1,161 @@
+<h1 id="problem-building-a-number-guess-game-with-html-and-javascript">Problem: Building a Number Guess Game with HTML and JavaScript</h1>
+<h2 id="objectives">Objectives:</h2>
+<ul>
+<li>Understand the basic structure of HTML and JavaScript.</li>
+<li>Learn how to create interactive elements using JavaScript.</li>
+<li>Develop a simple game logic to guess a random number.</li>
+<li>Implement user input and feedback mechanisms.</li>
+</ul>
+<h2 id="tasks">Tasks:</h2>
+<h3 id="task-1-html-structure">Task 1: HTML Structure</h3>
+<ul>
+<li>Create a basic HTML structure with a <code>div</code> element to contain the game elements.</li>
+<li>Add a <code>h1</code> element to display the game title.</li>
+<li>Create a <code>p</code> element to display instructions or messages.</li>
+<li>Add an <code>input</code> element to allow the user to enter their guess.</li>
+<li>Add a <code>button</code> element to submit the guess.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>    <span class="kw">&lt;h1&gt;</span>Number guessing game<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">&lt;p&gt;</span>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We&#39;ll tell you if your guess was too high or too low.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;form&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="kw">&lt;label</span><span class="ot"> for=</span><span class="st">&quot;guessField&quot;</span><span class="kw">&gt;</span>Enter a guess: <span class="kw">&lt;/label&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>      <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;number&quot;</span><span class="ot"> min=</span><span class="st">&quot;1&quot;</span><span class="ot"> max=</span><span class="st">&quot;100&quot;</span><span class="ot"> required id=</span><span class="st">&quot;guessField&quot;</span><span class="ot"> class=</span><span class="st">&quot;guessField&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>      <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;submit&quot;</span><span class="ot"> value=</span><span class="st">&quot;Submit guess&quot;</span><span class="ot"> class=</span><span class="st">&quot;guessSubmit&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;resultParas&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>      <span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;guesses&quot;</span><span class="kw">&gt;&lt;/p&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>      <span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;lastResult&quot;</span><span class="kw">&gt;&lt;/p&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>      <span class="kw">&lt;p</span><span class="ot"> class=</span><span class="st">&quot;lowOrHi&quot;</span><span class="kw">&gt;&lt;/p&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<h3 id="task-2-javascript-logic">Task 2: JavaScript Logic</h3>
+<ul>
+<li>Random Number Generation:
+<ul>
+<li>Use JavaScript's <code>Math.random()</code> function to generate a random number within a specified range.</li>
+<li>Store the generated number in a variable.</li>
+</ul></li>
+<li>User Input:
+<ul>
+<li>Use the <code>getElementById()</code> method to access the input element.</li>
+<li>Get the value entered by the user and store it in a variable.</li>
+</ul></li>
+<li>Game Logic:
+<ul>
+<li>Compare the user's guess with the generated number.</li>
+<li>If the guess is correct, display a message indicating a win and the number of attempts.</li>
+<li>If the guess is incorrect, provide feedback (e.g., "Too high" or "Too low") and allow the user to try again.</li>
+</ul></li>
+<li>Attempt Counter:
+<ul>
+<li>Implement a counter to track the number of attempts made by the user.</li>
+<li>Update the counter after each guess.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>      <span class="kw">let</span> randomNumber <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>) <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>      <span class="kw">const</span> guesses <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.guesses&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>      <span class="kw">const</span> lastResult <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.lastResult&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>      <span class="kw">const</span> lowOrHi <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.lowOrHi&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>      <span class="kw">const</span> guessSubmit <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.guessSubmit&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>      <span class="kw">const</span> guessField <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.guessField&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>      <span class="kw">let</span> guessCount <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>      <span class="kw">let</span> resetButton<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>      <span class="kw">function</span> <span class="fu">checkGuess</span>() {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>        <span class="kw">const</span> userGuess <span class="op">=</span> <span class="bu">Number</span>(guessField<span class="op">.</span><span class="at">value</span>)<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>        <span class="cf">if</span> (guessCount <span class="op">===</span> <span class="dv">1</span>) {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>          guesses<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Previous guesses: &#39;</span><span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>        }</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>        guesses<span class="op">.</span><span class="at">textContent</span> <span class="op">+=</span> userGuess <span class="op">+</span> <span class="st">&#39; &#39;</span><span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>        <span class="cf">if</span> (userGuess <span class="op">===</span> randomNumber) {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>          lastResult<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Congratulations! You got it right!&#39;</span><span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>          lastResult<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">backgroundColor</span> <span class="op">=</span> <span class="st">&#39;green&#39;</span><span class="op">;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>          lowOrHi<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>          <span class="fu">setGameOver</span>()<span class="op">;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>        } <span class="cf">else</span> <span class="cf">if</span> (guessCount <span class="op">===</span> <span class="dv">10</span>) {</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>          lastResult<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;!!!GAME OVER!!!&#39;</span><span class="op">;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>          lowOrHi<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>          <span class="fu">setGameOver</span>()<span class="op">;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>        } <span class="cf">else</span> {</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>          lastResult<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Wrong!&#39;</span><span class="op">;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>          lastResult<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">backgroundColor</span> <span class="op">=</span> <span class="st">&#39;red&#39;</span><span class="op">;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>          <span class="cf">if</span>(userGuess <span class="op">&lt;</span> randomNumber) {</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>            lowOrHi<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Last guess was too low!&#39;</span> <span class="op">;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>          } <span class="cf">else</span> <span class="cf">if</span>(userGuess <span class="op">&gt;</span> randomNumber) {</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>            lowOrHi<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Last guess was too high!&#39;</span><span class="op">;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>          }</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>        }</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a>        guessCount<span class="op">++;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="at">value</span> <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="fu">focus</span>()<span class="op">;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>      }</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>      guessSubmit<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;click&#39;</span><span class="op">,</span> checkGuess)<span class="op">;</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>      <span class="kw">function</span> <span class="fu">setGameOver</span>() {</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="at">disabled</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>        guessSubmit<span class="op">.</span><span class="at">disabled</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        resetButton <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">&#39;button&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>        resetButton<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;Start new game&#39;</span><span class="op">;</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>        <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="fu">appendChild</span>(resetButton)<span class="op">;</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a>        resetButton<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;click&#39;</span><span class="op">,</span> resetGame)<span class="op">;</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a>      }</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a>      <span class="kw">function</span> <span class="fu">resetGame</span>() {</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true"></a>        guessCount <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true"></a>        <span class="kw">const</span> resetParas <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelectorAll</span>(<span class="st">&#39;.resultParas p&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true"></a>        <span class="cf">for</span> (<span class="kw">const</span> resetPara <span class="kw">of</span> resetParas) {</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true"></a>          resetPara<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true"></a>        }</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true"></a>        resetButton<span class="op">.</span><span class="at">parentNode</span><span class="op">.</span><span class="fu">removeChild</span>(resetButton)<span class="op">;</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="at">disabled</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true"></a>        guessSubmit<span class="op">.</span><span class="at">disabled</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="at">value</span> <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true"></a>        guessField<span class="op">.</span><span class="fu">focus</span>()<span class="op">;</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true"></a>        lastResult<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">backgroundColor</span> <span class="op">=</span> <span class="st">&#39;white&#39;</span><span class="op">;</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true"></a>        randomNumber <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>) <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true"></a>      }</span></code></pre></div>
+<h3 id="task-3-user-interface">Task 3: User Interface</h3>
+<ul>
+<li>Feedback Display:
+<ul>
+<li>Use the textContent property to update the p element with feedback messages.</li>
+<li>Display appropriate messages based on the user's guess.</li>
+</ul></li>
+<li>Game Over:
+<ul>
+<li>Once the user guesses the correct number, display a message indicating the game is over and the total number of attempts.</li>
+<li>Optionally, provide a way to restart the game.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>    <span class="kw">&lt;style&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>      html {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>        <span class="kw">font-family</span>: <span class="dv">sans-serif</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>      }</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>      body {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>        <span class="kw">width</span>: <span class="dv">50</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>        <span class="kw">max-width</span>: <span class="dv">800</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>        <span class="kw">min-width</span>: <span class="dv">480</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>        <span class="kw">margin</span>: <span class="dv">0</span> <span class="bu">auto</span><span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>      }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>      </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>      <span class="fu">.form</span> input<span class="ex">[type</span><span class="op">=</span><span class="st">&quot;number&quot;</span><span class="ex">]</span> {</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>        <span class="kw">width</span>: <span class="dv">200</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>      }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>      <span class="fu">.lastResult</span> {</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>        <span class="kw">color</span>: <span class="cn">white</span><span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>        <span class="kw">padding</span>: <span class="dv">3</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>      }</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    <span class="kw">&lt;/style&gt;</span></span></code></pre></div>
+<h2 id="sample-output">Sample Output:</h2>
+<p><img src="./images/image8-1.png" /></p>
+<p><img src="./images/image8-2.png" /></p>
+<p><img src="./images/image8-3.png" /></p>
