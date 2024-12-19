@@ -1,0 +1,43 @@
+<h1 id="lab-communication-among-services-using-resttemplate">Lab: Communication among services using RestTemplate</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-in-the-service-you-want-to-fetch-data-event-service">Task 1: In the Service you want to fetch data <code>EVENT SERVICE</code></h3>
+<p><img src="./images/image8-1.png" /></p>
+<h3 id="task-2-in-the-event-service">Task 2: In the EVENT SERVICE</h3>
+<ul>
+<li>Create an Endpoint to view event details</li>
+</ul>
+<p><img src="./images/image8-2.png" /></p>
+<ul>
+<li>In the ServiceImpl</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>    <span class="at">@Override</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">public</span> EventResponse <span class="fu">getEventDetails</span>(<span class="bu">Long</span> eventId) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="bu">Event</span> event = eventRepository.<span class="fu">findById</span>(eventId).<span class="fu">get</span>();</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        EventResponse eventResponse = <span class="kw">new</span> <span class="fu">EventResponse</span>();</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        eventResponse.<span class="fu">setId</span>(event.<span class="fu">getId</span>());</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        eventResponse.<span class="fu">setName</span>(event.<span class="fu">getName</span>());</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>        eventResponse.<span class="fu">setDescription</span>(event.<span class="fu">getDescription</span>());</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        eventResponse.<span class="fu">setEventStatus</span>(event.<span class="fu">getEventStatus</span>());</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="bu">Long</span> venueId = event.<span class="fu">getVenueId</span>();</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>        ApiResponse apiResponse = restTemplate.<span class="fu">getForObject</span>(<span class="st">&quot;http://VENUE-SERVICE/api/venues/&quot;</span>+venueId, ApiResponse.<span class="fu">class</span>);</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>        ObjectMapper objectMapper = <span class="kw">new</span> <span class="fu">ObjectMapper</span>();</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        VenueModel venueModel = objectMapper.<span class="fu">convertValue</span>(apiResponse.<span class="fu">getData</span>(),VenueModel.<span class="fu">class</span>);</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        eventResponse.<span class="fu">setVenue</span>(venueModel);</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>        eventResponse.<span class="fu">setOrganizerId</span>(event.<span class="fu">getOrganizerId</span>());</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>        <span class="kw">return</span> eventResponse;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>    }</span></code></pre></div>
+<h2 id="output">Output</h2>
+<p>Test the endpoints with relevant details</p>
+<p><img src="./images/image8-3.png" /></p>
+<p>Refer :</p>
+<ol>
+<li><a href="https://spring.io/guides/gs/consuming-rest">https://spring.io/guides/gs/consuming-rest</a></li>
+<li><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html</a></li>
+<li><a href="https://www.springcloud.io/post/2022-03/spring-resttemplate/#gsc.tab=0">https://www.springcloud.io/post/2022-03/spring-resttemplate/#gsc.tab=0</a></li>
+</ol>

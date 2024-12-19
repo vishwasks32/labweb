@@ -1,0 +1,45 @@
+<h1 id="lab-creating-venue-service-for-events-management-app">Lab: Creating Venue Service for Events Management App</h1>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-generating-template-from-spring-initializer">Task 1: Generating Template from spring initializer</h3>
+<ul>
+<li><p>visit the <a href="https://start.spring.io">spring initializer</a></p></li>
+<li><p>Add the dependencies</p>
+<ul>
+<li>Spring Web</li>
+<li>Eureka Client</li>
+<li>Lombok</li>
+<li>Data JPA</li>
+<li>Mysql</li>
+<li>Cloud Bootstrap</li>
+</ul></li>
+</ul>
+<p><img src="./images/image3-3.png" /></p>
+<h3 id="task-2-open-the-project-in-intellij">Task 2: Open the project in intelliJ</h3>
+<ul>
+<li>Convert <code>application.properties</code> to <code>application.yaml</code></li>
+<li>Set <code>server.port</code> to <code>8082</code></li>
+</ul>
+<h3 id="task-3-creating-venue-service">Task 3: Creating venue Service</h3>
+<ul>
+<li><p>Create – endpoints as in spring boot app as you created earlier</p></li>
+<li><p>Venue Entity</p>
+<p><img src="./images/image3-1.png" /></p></li>
+<li><p>Venue Availability Entity</p></li>
+</ul>
+<p><img src="./images/image3-2.png" /></p>
+<ul>
+<li>Create backend end points</li>
+</ul>
+<p><img src="./images/image3-5.png" /></p>
+<h3 id="task-4-add-venue-service-as-eureka-client">Task 4: Add venue Service as Eureka Client</h3>
+<p>Add below code to <code>application.yml</code> of venue service</p>
+<p><img src="./images/image3-4.png" /></p>
+<h2 id="output">Output</h2>
+<ul>
+<li>Venue service registered in eureka service registry</li>
+</ul>
+<p><img src="./images/image3-6.png" /></p>
+<ul>
+<li>Venue Service Testing in Postman tool</li>
+</ul>
+<p><img src="./images/image3-7.png" /></p>

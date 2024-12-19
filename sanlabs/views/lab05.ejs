@@ -1,0 +1,46 @@
+<h1 id="lab-communication-between-event-service-and-venue-service-in-events-management-app">Lab: Communication between event service and venue service in Events Management App</h1>
+<p>Feign is a declarative web service client. It makes writing web service clients easier. To use Feign create an interface and annotate it. It has pluggable annotation support including Feign annotations and JAX-RS annotations. Feign also supports pluggable encoders and decoders.</p>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-pre-requsites">Task Pre-requsites</h3>
+<ul>
+<li>Add a bookVenue endpoint in venue service &amp; test it.</li>
+<li>Also add exception handling if venue is not present</li>
+</ul>
+<p><img src="./images/image5-6.png" /></p>
+<p><img src="./images/image5-7.png" /></p>
+<h3 id="task-1-in-the-event-service-add-the-dependency-open-feign-client">Task 1: In the Event Service add the dependency open feign client</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">&lt;dependency&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">&lt;groupId&gt;</span>org.springframework.cloud<span class="kw">&lt;/groupId&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">&lt;artifactId&gt;</span>spring-cloud-starter-openfeign<span class="kw">&lt;/artifactId&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">&lt;/dependency&gt;</span></span></code></pre></div>
+<h3 id="task-2-make-event-service-as-a-open-feign-client">Task 2: Make Event Service as a open feign client</h3>
+<p><img src="./images/image5-1.png" /></p>
+<h3 id="task-3-adding-venue-service-as-external-dependency">Task 3: Adding Venue service as external dependency</h3>
+<ul>
+<li>In the orderService create a <code>external</code> package</li>
+</ul>
+<p><img src="./images/image5-2.png" /></p>
+<h3 id="task-4-in-the-interface-venue-service-add">Task 4: In the interface venue service add</h3>
+<ul>
+<li>Implement Feign Client(Product Service) in Order service as an external.client package and create an interface</li>
+<li>Declare the method of venue service which you are going to use</li>
+</ul>
+<p><img src="./images/image5-3.png" /></p>
+<ul>
+<li>Add the code to call bookVenue when Event is created</li>
+<li>Modify create event method in service</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>    <span class="at">@Override</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="kw">public</span> EventModel <span class="fu">createEvent</span>(EventModel eventModel) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>        <span class="bu">Event</span> savedEvent = eventRepository.<span class="fu">save</span>(<span class="fu">eventModelToEvent</span>(eventModel));</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        VenueAvailabilityModel venueAvailabilityModel = <span class="kw">new</span> <span class="fu">VenueAvailabilityModel</span>();</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>        venueAvailabilityModel.<span class="fu">setVenueId</span>(eventModel.<span class="fu">getVenueId</span>());</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        venueAvailabilityModel.<span class="fu">setStartDateTime</span>(eventModel.<span class="fu">getStartDateTime</span>());</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>        venueAvailabilityModel.<span class="fu">setEndDateTime</span>(eventModel.<span class="fu">getEndDateTime</span>());</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>        venueService.<span class="fu">bookVenue</span>(eventModel.<span class="fu">getVenueId</span>(),venueAvailabilityModel);</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">eventToEventModel</span>(savedEvent);</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    }</span></code></pre></div>
+<ul>
+<li>Restart the event service</li>
+<li>Test the api using create event</li>
+</ul>
